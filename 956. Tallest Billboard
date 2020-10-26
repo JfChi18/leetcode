@@ -1,0 +1,25 @@
+class Solution {
+    public int tallestBillboard(int[] rods) {
+        Map<Integer, Integer> dp = new HashMap<>();
+        dp.put(0, 0);
+        int n = rods.length;
+        
+        for (int rod : rods) {
+            Map<Integer, Integer> temp = new HashMap<>();
+            dp.forEach((k, v) -> {
+                if (temp.getOrDefault(k, -1) < v) temp.put(k, v);
+                if (temp.getOrDefault(k + rod, -1) < v + rod) temp.put(k + rod, v + rod);
+
+                //累加和较小的子序列加上rod
+                int dis = k - rod;  //计算小累加和的数组加上rod后，原来小累加的数组与大累加的数组的差距
+                int larger = Math.max(v, v - dis);  //计算加上rod两个数组的累加和最大值
+                dis = Math.abs(dis);  //计算差距的绝对值
+                if (temp.getOrDefault(dis, -1) < larger) temp.put(dis, larger);  //更新差距的累加和最大值
+            });
+            dp = temp;
+        }
+
+        return dp.get(0);
+    }
+}
+
