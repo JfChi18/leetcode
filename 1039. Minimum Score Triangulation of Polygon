@@ -1,0 +1,26 @@
+class Solution {
+    public int minScoreTriangulation(int[] A) {
+        int[][] cache = new int[A.length][A.length];
+        return helper(A,0,A.length-1,cache);
+    }
+    private int helper(int[] A,int i,int j,int[][] cache){
+        // if number of vertices is less than 2, you can't do anything
+        if(j-i<2)
+            return 0;
+        // if number of vertices is equal to 3, then you can easily find the answer by
+        //multiplying the vertices value
+        if(j-i == 2)
+            return A[i]*A[i+1]*A[j];
+        
+        if(cache[i][j]!=0)
+            return cache[i][j];
+        int min = Integer.MAX_VALUE;
+        //sol(i,j) = sol(i,k)+sol(k,j)+A[i]*A[k]*A[j];
+        for(int k = i+1 ; k<j;k++){
+            min = Math.min(min,helper(A,i,k,cache)+helper(A,k,j,cache)+A[i]*A[k]*A[j]);
+        }
+        cache[i][j] = min;
+        return min;
+        
+    }
+}
